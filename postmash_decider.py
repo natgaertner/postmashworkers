@@ -9,7 +9,7 @@ logger = logging.getLogger('postmash.decider')
 
 DOMAIN = 'PostMashDomain'
 ACTIVITY = 'PostMashInsert'
-ACTIVITY_VERSION = '1.0'
+ACTIVITY_VERSION = '1.1'
 VERSION = '1.0'
 TASKLIST = 'PostMashTasks'
 
