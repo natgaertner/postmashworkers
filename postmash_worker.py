@@ -36,6 +36,7 @@ class PostMashWorker(swf.ActivityWorker):
 		self.complete()
 	    except Exception as e:
 		logger.exception('exception inserting data')
+		self.fail()
             return True
 
 if __name__ == '__main__':
