@@ -19,7 +19,11 @@ class PostMashDecider(swf.Decider):
     version = VERSION
 
     def run(self):
-        history = self.poll()
+	try:
+            history = self.poll()
+	except Exception as e:
+	    logger.warning(e)
+	    raise e
         if 'events' in history:
             # Find workflow events not related to decision scheduling.
             workflow_events = [e for e in history['events']

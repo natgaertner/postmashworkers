@@ -21,7 +21,11 @@ class PostMashWorker(swf.ActivityWorker):
     task_list = TASKLIST
 
     def run(self):
-        activity_task = self.poll()
+	try:
+            activity_task = self.poll()
+	except Exception as e:
+	    logger.warning(e)
+	    raise e
         if 'activityId' in activity_task:
 	    try:
 		data = json.loads(activity_task['input'])
