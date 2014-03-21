@@ -12,7 +12,7 @@ logger = logging.getLogger('postmash.worker')
 history = Table('history')
 
 DOMAIN = 'PostMashDomain'
-VERSION = '1.0'
+VERSION = '1.1'
 TASKLIST = 'PostMashTasks'
 
 class PostMashWorker(swf.ActivityWorker):

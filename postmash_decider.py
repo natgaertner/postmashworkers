@@ -9,6 +9,7 @@ logger = logging.getLogger('postmash.decider')
 
 DOMAIN = 'PostMashDomain'
 ACTIVITY = 'PostMashInsert'
+ACTIVITY_VERSION = '1.0'
 VERSION = '1.0'
 TASKLIST = 'PostMashTasks'
 
@@ -33,7 +34,7 @@ class PostMashDecider(swf.Decider):
             decisions = swf.Layer1Decisions()
             if last_event['eventType'] == 'WorkflowExecutionStarted':
 		try:
-                	decisions.schedule_activity_task('insert_post', ACTIVITY, VERSION, task_list=TASKLIST,input = last_event['workflowExecutionStartedEventAttributes']['input'])
+                	decisions.schedule_activity_task('insert_post', ACTIVITY, ACTIVITY_VERSION, task_list=TASKLIST,input = last_event['workflowExecutionStartedEventAttributes']['input'])
 		except Exception as e:
 		    logger.exception('exception scheduling insert_post activity')
             elif last_event['eventType'] == 'ActivityTaskCompleted':
