@@ -2,12 +2,13 @@ import boto.swf.layer2 as swf
 from boto.dynamodb2.table import Table
 import json
 from uuid import uuid4
-import logging
-from logging.handlers import RotatingFileHandler
-handler = RotatingFileHandler('/var/log/postmash/postmash_worker.log')
-handler.setLevel(logging.DEBUG)
-logger = logging.getLogger("postmash_worker")
-logger.addHandler(handler)
+import logging, logging.handlers
+rootLogger = logging.getLogger('postmash')
+rootLogger.setLevel(logging.DEBUG)
+socketHandler = logging.handlers.SocketHandler('localhost',logging.handlers.DEFAULT_TCP_LOGGING_PORT)
+rootLogger.addHandler(socketHandler)
+logger = logging.getLogger('postmash.worker')
+
 history = Table('history')
 
 DOMAIN = 'PostMashDomain'
@@ -21,6 +22,7 @@ class PostMashWorker(swf.ActivityWorker):
     task_list = TASKLIST
 
     def run(self):
+	logger.info('starting postmash worker')
 	try:
             activity_task = self.poll()
 	except Exception as e:

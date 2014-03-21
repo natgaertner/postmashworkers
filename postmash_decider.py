@@ -1,11 +1,11 @@
 # hello_decider.py
 import boto.swf.layer2 as swf
-import logging
-from logging.handlers import RotatingFileHandler
-handler = RotatingFileHandler('/var/log/postmash/postmash_decider.log')
-handler.setLevel(logging.DEBUG)
-logger = logging.getLogger("postmash_decider")
-logger.addHandler(handler)
+import logging, logging.handlers
+rootLogger = logging.getLogger('postmash')
+rootLogger.setLevel(logging.DEBUG)
+socketHandler = logging.handlers.SocketHandler('localhost',logging.handlers.DEFAULT_TCP_LOGGING_PORT)
+rootLogger.addHandler(socketHandler)
+logger = logging.getLogger('postmash.decider')
 
 DOMAIN = 'PostMashDomain'
 ACTIVITY = 'PostMashInsert'
@@ -19,6 +19,7 @@ class PostMashDecider(swf.Decider):
     version = VERSION
 
     def run(self):
+	logger.info('starting postmash decider')
 	try:
             history = self.poll()
 	except Exception as e:
