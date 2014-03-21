@@ -25,17 +25,17 @@ class PostMashWorker(swf.ActivityWorker):
 	try:
             activity_task = self.poll()
 	except Exception as e:
-	    logger.warning('exception polling for data')
+	    logger.exception('exception polling for data')
 	    raise e
         if 'activityId' in activity_task:
 	    try:
 		data = json.loads(activity_task['input'])
 		data.update({'uuid':uuid4().hex})
 		history.put_item(data=data)
-		logger.info('inserted {data}'.format(json.dumps(data)))
+		logger.info('inserted {data}'.format(data=json.dumps(data)))
 		self.complete()
 	    except Exception as e:
-		logger.warning('exception inserting data')
+		logger.exception('exception inserting data')
             return True
 
 if __name__ == '__main__':

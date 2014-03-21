@@ -22,7 +22,7 @@ class PostMashDecider(swf.Decider):
 	try:
             history = self.poll()
 	except Exception as e:
-	    logger.warning('exception polling for decider work')
+	    logger.exception('exception polling for decider work')
 	    raise e
         if 'events' in history:
             # Find workflow events not related to decision scheduling.
@@ -35,12 +35,12 @@ class PostMashDecider(swf.Decider):
 		try:
                 	decisions.schedule_activity_task('insert_post', ACTIVITY, VERSION, task_list=TASKLIST,input = last_event['workflowExecutionStartedEventAttributes']['input'])
 		except Exception as e:
-		    logger.warning('exception scheduling insert_post activity')
+		    logger.exception('exception scheduling insert_post activity')
             elif last_event['eventType'] == 'ActivityTaskCompleted':
 		try:
                     decisions.complete_workflow_execution()
 		except Exception as e:
-		    logger.warning('exception closing workflow')
+		    logger.exception('exception closing workflow')
             self.complete(decisions=decisions)
 	    logger.info("complete")
             return True
