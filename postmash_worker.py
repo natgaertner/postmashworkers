@@ -22,11 +22,10 @@ class PostMashWorker(swf.ActivityWorker):
     task_list = TASKLIST
 
     def run(self):
-	logger.info('starting postmash worker')
 	try:
             activity_task = self.poll()
 	except Exception as e:
-	    logger.warning(e)
+	    logger.warning('exception polling for data')
 	    raise e
         if 'activityId' in activity_task:
 	    try:
@@ -36,8 +35,9 @@ class PostMashWorker(swf.ActivityWorker):
 		logger.info('inserted {data}'.format(json.dumps(data)))
 		self.complete()
 	    except Exception as e:
-		logger.warning(e)
+		logger.warning('exception inserting data')
             return True
 
 if __name__ == '__main__':
+    logger.info('starting postmash worker')
     while True: PostMashWorker().run()
