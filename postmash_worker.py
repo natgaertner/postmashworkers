@@ -1,15 +1,14 @@
 import boto.swf.layer2 as swf
-from boto.dynamodb2.table import Table
 import json
 from uuid import uuid4
 import logging, logging.handlers
+from db_tasks import insert_mash
 rootLogger = logging.getLogger('postmash')
 rootLogger.setLevel(logging.DEBUG)
 socketHandler = logging.handlers.SocketHandler('localhost',logging.handlers.DEFAULT_TCP_LOGGING_PORT)
 rootLogger.addHandler(socketHandler)
 logger = logging.getLogger('postmash.worker')
 
-history = Table('history')
 
 DOMAIN = 'PostMashDomain'
 VERSION = '1.1'
@@ -30,8 +29,7 @@ class PostMashWorker(swf.ActivityWorker):
         if 'activityId' in activity_task:
 	    try:
 		data = json.loads(activity_task['input'])
-		data.update({'uuid':uuid4().hex})
-		history.put_item(data=data)
+		insert_mash(data)
 		logger.info('inserted {data}'.format(data=json.dumps(data)))
 		self.complete()
 	    except Exception as e:
