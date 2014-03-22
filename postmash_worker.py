@@ -33,6 +33,7 @@ class PostMashWorker(swf.ActivityWorker):
 		logger.info('inserted {data}'.format(data=json.dumps(data)))
 		self.complete()
 	    except Exception as e:
+		logger.warning(data)
 		logger.exception('exception inserting data')
 		self.fail()
             return True
